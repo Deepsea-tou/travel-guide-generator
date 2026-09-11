@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 """Export Travel Roadbook v2 bundles using the proven legacy formats."""
 
-from copy import deepcopy
 from pathlib import Path
 
 try:
     from .export_guide import geojson_data, ics_text, markdown_text
     from .guide_utils import write_json
-    from .render_guide import render_file
+    from .render_roadbook import render_file
 except ImportError:
     from export_guide import geojson_data, ics_text, markdown_text
     from guide_utils import write_json
-    from render_guide import render_file
+    from render_roadbook import render_file
 
 
 def export_roadbook_bundle(data, output_base):
@@ -32,7 +31,5 @@ def export_roadbook_bundle(data, output_base):
         stream.write(ics_text(data))
     write_json(paths["geojson"], geojson_data(data))
 
-    legacy_view = deepcopy(data)
-    legacy_view["schema_version"] = "1.0"
-    render_file(legacy_view, paths["html"], allow_invalid=True)
+    render_file(data, paths["html"])
     return {name: str(path) for name, path in paths.items()}
