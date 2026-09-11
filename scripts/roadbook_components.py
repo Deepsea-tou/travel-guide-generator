@@ -22,7 +22,7 @@ def render_hero(data):
     )
     fact_html = "".join(f'<div class="fact"><small>{e(label)}</small><strong>{e(value)}</strong></div>' for label, value in facts)
     return f'''<header class="hero" data-section="overview">
-      <div class="hero-top"><span>TravelOS / Roadbook 02</span><span>{e(meta.get("language", "zh-CN"))}</span></div>
+      <div class="hero-top"><span>TravelOS / Roadbook 02</span><button class="utility-button" type="button" data-action="print">打印 / PDF</button></div>
       <div class="hero-copy"><p class="eyebrow">A field guide for moving well</p><h1>{e(meta.get("title", "旅行路书"))}</h1><p class="subtitle">{e(meta.get("subtitle", "把路线、节奏与临场判断，整理成一份真正能带上路的计划。"))}</p></div>
       <div class="fact-strip">{fact_html}</div>
     </header>'''
@@ -46,20 +46,24 @@ def _micro_list(values):
 
 def render_days(data):
     days_html = []
+    nav = []
     for day in data.get("days", []):
+        nav.append(f'<a href="#day-{e(day.get("day", ""))}">D{e(day.get("day", ""))}</a>')
         items = []
-        for item in day.get("items", []):
+        for item_index, item in enumerate(day.get("items", []), start=1):
+            item_key = f'day-{day.get("day", "")}-item-{item_index}'
             route = item.get("route_from_previous", {})
             route_html = f'<span class="route-leg">{e(route.get("mode", "移动"))} · {e(route.get("duration_min", "—"))} min</span>' if route else ""
             items.append(f'''<li class="timeline-item">
-              <time class="timeline-time">{e(item.get("start", ""))}<br>{e(item.get("end", ""))}</time><span class="timeline-mark" aria-hidden="true"></span>
-              <div class="timeline-copy"><h3>{e(item.get("name", "未命名行程"))}</h3><p>{e(item.get("description", ""))}</p>{route_html}</div>
+              <time class="timeline-time" data-start="{e(item.get("start", ""))}" data-end="{e(item.get("end", ""))}"><span>{e(item.get("start", ""))}</span><br><span>{e(item.get("end", ""))}</span></time><span class="timeline-mark" aria-hidden="true"></span>
+              <div class="timeline-copy"><div class="item-heading"><label><input class="item-check" type="checkbox" data-key="{e(item_key)}"><span class="sr-only">标记完成</span></label><h3>{e(item.get("name", "未命名行程"))}</h3></div>
+              <p class="item-details">{e(item.get("description", ""))}</p>{route_html}<button class="text-button" type="button" data-action="toggle-details" aria-expanded="true">收起详情</button></div>
             </li>''')
         comfort = list(day.get("rest_windows", [])) + list(day.get("rain_alternatives", []))
         days_html.append(f'''<article class="day" id="day-{e(day.get("day", ""))}" data-day="{e(day.get("day", ""))}">
-          <div class="day-index">DAY {e(day.get("day", ""))}</div><div><h3 class="day-title">{e(day.get("title", ""))}</h3><p class="day-date">{e(day.get("date", ""))}</p>
+          <div class="day-index">DAY {e(day.get("day", ""))}</div><div><div class="day-heading"><div><h3 class="day-title">{e(day.get("title", ""))}</h3><p class="day-date">{e(day.get("date", ""))}</p></div><label class="shift-control">顺延 <input type="number" value="15" min="-180" max="180" step="5" aria-label="顺延分钟"><button type="button" data-action="shift-day">应用</button></label></div>
           {_micro_list(comfort)}<ol class="timeline">{"".join(items)}</ol></div></article>''')
-    return f'<section class="section" id="daily-plan" data-section="daily-plan">{section_heading("02", "Pace", "每天只保留值得的事")}{"".join(days_html)}</section>'
+    return f'<section class="section" id="daily-plan" data-section="daily-plan">{section_heading("02", "Pace", "每天只保留值得的事")}<nav class="day-nav" aria-label="每日行程">{"".join(nav)}</nav>{"".join(days_html)}<p class="sr-only" aria-live="polite" id="roadbook-status"></p></section>'
 
 
 def _cards(records, kind):
@@ -82,9 +86,13 @@ def render_budget(data):
     selected = budget.get("selected")
     profile = budget.get("profiles", {}).get(selected, {}) if selected else budget
     categories = profile.get("categories", {})
-    rows = "".join(f'<tr><th>{e(name)}</th><td>{e(value)}</td></tr>' for name, value in categories.items())
+    if not categories:
+        categories = {"未分配": 0}
+    rows = "".join(f'<tr><th>{e(name)}</th><td><input class="budget-input" type="number" min="0" step="1" value="{e(value)}" data-category="{e(name)}" aria-label="{e(name)}预算"></td></tr>' for name, value in categories.items())
     total = profile.get("total", sum(value for value in categories.values() if isinstance(value, (int, float))))
-    return f'<section class="section" data-section="budget">{section_heading("04", "Budget", "花费透明，临场不慌")}<div class="split-grid"><table class="budget-table"><tbody>{rows or "<tr><th>待估算</th><td>—</td></tr>"}<tr><th>合计</th><td>{e(total)}</td></tr></tbody></table>{render_mode_panel(data)}</div></section>'
+    packing = data.get("packing", ["证件与票据", "充电与饮水"])
+    checks = "".join(f'<label><input class="packing-check" type="checkbox" data-key="packing-{index}"> {e(item)}</label>' for index, item in enumerate(packing))
+    return f'<section class="section" data-section="budget">{section_heading("04", "Budget", "花费透明，临场不慌")}<div class="split-grid"><div><table class="budget-table"><tbody>{rows}<tr><th>合计</th><td id="budget-total">{e(total)}</td></tr></tbody></table><fieldset class="packing"><legend>出发清单</legend>{checks}</fieldset></div>{render_mode_panel(data)}</div></section>'
 
 
 def render_mode_panel(data):

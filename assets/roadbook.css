@@ -64,6 +64,12 @@
   .route-ribbon strong { display: block; margin-top: 10px; font-size: 1.08rem; }
   .route-ribbon span { color: var(--muted); font-size: .86rem; }
   .day { display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding: 34px 0; border-top: 1px solid var(--line); }
+  .day-nav { position: sticky; top: 10px; z-index: 5; display: flex; gap: 6px; width: max-content; max-width: 100%; padding: 6px; margin: 0 0 24px auto; overflow-x: auto; border: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); }
+  .day-nav a { min-width: 44px; min-height: 44px; display: grid; place-items: center; text-decoration: none; font: 700 .75rem/1 ui-monospace, monospace; }
+  .day-heading, .item-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .item-heading { justify-content: flex-start; }
+  .item-check, .packing-check { width: 20px; height: 20px; accent-color: var(--accent); }
+  .timeline-item:has(.item-check:checked) .timeline-copy { opacity: .56; }
   .day-index { position: sticky; top: 20px; align-self: start; font: 700 .78rem/1.4 ui-monospace, monospace; color: var(--accent); }
   .day-title { font-size: clamp(1.45rem, 3vw, 2.5rem); font-weight: 500; line-height: 1.15; }
   .day-date { color: var(--muted); margin-top: 6px; }
@@ -86,12 +92,20 @@
   .budget-table { width: 100%; border-collapse: collapse; }
   .budget-table th, .budget-table td { padding: 12px 0; border-bottom: 1px solid var(--line); text-align: left; }
   .budget-table td:last-child { text-align: right; font: 700 .9rem/1 ui-monospace, monospace; }
+  .budget-input { width: 7rem; min-height: 44px; padding: 6px 10px; border: 1px solid var(--line); background: transparent; color: inherit; text-align: right; }
+  .utility-button, .text-button, .shift-control button { min-height: 44px; border: 1px solid currentColor; background: transparent; color: inherit; padding: 8px 13px; cursor: pointer; }
+  .text-button { margin-top: 12px; border-color: var(--line); color: var(--muted); font-size: .78rem; }
+  .shift-control { display: flex; align-items: center; gap: 6px; font: .74rem/1 ui-monospace, monospace; }
+  .shift-control input { width: 4rem; min-height: 44px; border: 1px solid var(--line); background: transparent; color: inherit; padding: 6px; }
+  .packing { display: grid; gap: 10px; margin: 30px 0 0; padding: 18px; border: 1px solid var(--line); }
+  .packing label { display: flex; align-items: center; gap: 10px; min-height: 34px; }
   .mode-panel { padding: 26px; background: var(--ink); color: var(--paper); }
   .mode-panel h3 { font-weight: 500; font-size: 1.4rem; }
   .mode-panel ul { padding-left: 1.2rem; margin-top: 12px; }
   .source-list { padding-left: 1.2rem; columns: 2; column-gap: 40px; }
   .source-list li { break-inside: avoid; margin-bottom: 12px; color: var(--muted); }
   .empty { color: var(--muted); font-style: italic; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 }
 
 @layer utilities {
@@ -106,6 +120,7 @@
     .day-index { position: static; }
     .timeline-item { grid-template-columns: 72px 18px 1fr; gap: 10px; }
     .split-grid, .card-grid { grid-template-columns: 1fr; }
+    .day-heading { align-items: flex-start; flex-direction: column; }
     .source-list { columns: 1; }
   }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
@@ -116,5 +131,6 @@
     .section { padding: 24px 0; }
     .day { break-inside: avoid; }
     a { color: inherit; text-decoration: none; }
+    button, input, .day-nav, .packing { display: none !important; }
   }
 }

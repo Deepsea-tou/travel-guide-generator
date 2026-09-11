@@ -1,0 +1,10 @@
+{
+  "name": "travel-roadbook-skill",
+  "private": true,
+  "scripts": {
+    "test:browser": "node tests/browser/roadbook-smoke.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}
