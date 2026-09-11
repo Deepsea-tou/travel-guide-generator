@@ -1,0 +1,19 @@
+{
+  "schema_version": "2.0",
+  "meta": {"title": "高原五日 · 公路节奏路书", "subtitle": "让驾驶、补能和停下来的理由同样清楚", "destination": "川西高原示例环线", "language": "zh-CN", "start_date": "2026-10-01", "days": 5, "travelers": 2, "currency": "CNY", "timezone": "Asia/Shanghai", "theme": "plateau", "trip_id": "demo-plateau-5d"},
+  "trip": {"primary_mode": "road_trip", "secondary_modes": ["hiking"]},
+  "privacy": {"output_scope": "personal", "private_paths": [], "sensitive_fields": []},
+  "personalization": {"pace": "relaxed", "signals": ["transport.drive", "nature.ridge"], "applied_rules": []},
+  "preferences": {"pace": "relaxed", "transport": ["drive"], "earliest_start": "08:00", "latest_end": "19:30"},
+  "sources": [{"id": "demo-road", "title": "脱敏公路演示数据，道路状态需实时复核", "type": "estimate", "checked_at": "2026-09-11", "estimated": true}],
+  "days": [
+    {"day": 1, "date": "2026-10-01", "title": "低海拔适应与首段移动", "driving_segments": [{"mode": "drive", "distance_km": 260, "duration_min": 270, "estimated": true}], "fuel_or_charge": ["出城前满油/满电", "中途服务区复核续航"], "parking": ["住宿停车场"], "stop_conditions": [{"trigger": "道路管制或到达时间晚于 18:30", "action": "在前一城镇住宿"}], "items": [{"name": "出发检查", "start": "08:00", "end": "08:30", "description": "轮胎、制动、油电、离线地图与保暖物。", "source_ids": ["demo-road"]}, {"name": "适应地住宿", "start": "16:30", "end": "18:00", "description": "不继续夜驾，轻量散步后休息。", "source_ids": ["demo-road"]}]},
+    {"day": 2, "date": "2026-10-02", "title": "垭口前后的短驾驶", "driving_segments": [{"mode": "drive", "distance_km": 180, "duration_min": 240, "estimated": true}], "fuel_or_charge": ["县城可靠站点"], "parking": ["观景点正规停车区", "住宿停车场"], "stop_conditions": [{"trigger": "降雪、结冰或强风预警", "action": "取消垭口段并走低海拔备选"}], "items": [{"name": "道路状态复核", "start": "08:00", "end": "08:30", "description": "向官方渠道核验垭口与施工信息。", "source_ids": ["demo-road"]}, {"name": "高原观景停留", "start": "14:00", "end": "16:00", "description": "只在正规区域停车，不在弯道临停。", "source_ids": ["demo-road"]}]},
+    {"day": 3, "date": "2026-10-03", "title": "零驾驶恢复日", "driving_segments": [{"mode": "drive", "distance_km": 20, "duration_min": 40, "estimated": true}], "fuel_or_charge": ["住宿地补能"], "parking": ["公共停车场"], "stop_conditions": [{"trigger": "出现持续高原不适", "action": "下降海拔并寻求医疗建议"}], "items": [{"name": "湖岸轻步行", "start": "10:00", "end": "12:00", "description": "不追求强度，以恢复和观察身体状态为主。", "source_ids": ["demo-road"]}, {"name": "午后休息", "start": "14:00", "end": "17:00", "description": "补水、整理车辆与确认下一段道路。", "source_ids": ["demo-road"]}]},
+    {"day": 4, "date": "2026-10-04", "title": "环线返回段", "driving_segments": [{"mode": "drive", "distance_km": 290, "duration_min": 330, "estimated": true}], "fuel_or_charge": ["上午主城镇补满", "午餐点检查续航"], "parking": ["午餐停车场", "住宿停车场"], "stop_conditions": [{"trigger": "驾驶疲劳或预计天黑后到达", "action": "提前在沿途县城结束当天行程"}], "items": [{"name": "司机状态检查", "start": "08:00", "end": "08:20", "description": "确认睡眠、视线与反应状态。", "source_ids": ["demo-road"]}, {"name": "午餐与强制休息", "start": "12:00", "end": "13:30", "description": "至少离车活动二十分钟。", "source_ids": ["demo-road"]}]},
+    {"day": 5, "date": "2026-10-05", "title": "短程收尾与还车检查", "driving_segments": [{"mode": "drive", "distance_km": 160, "duration_min": 190, "estimated": true}], "fuel_or_charge": ["返程前补能"], "parking": ["终点正规停车区"], "stop_conditions": [{"trigger": "返程拥堵显著增加", "action": "延后出发或增加中途休息"}], "items": [{"name": "短程返航", "start": "09:00", "end": "12:30", "description": "不安排额外远距离支线。", "source_ids": ["demo-road"]}, {"name": "车辆与行李检查", "start": "14:00", "end": "15:00", "description": "检查车辆、票据与遗留物。", "source_ids": ["demo-road"]}]}
+  ],
+  "budget": {"categories": {"租车与保险": 2200, "油费与路费": 1200, "住宿": 2000, "餐饮": 1200, "机动": 800}, "total": 7400},
+  "packing": ["驾驶证件", "车辆应急物", "保温衣物", "饮水食物", "离线地图"],
+  "tips": ["本示例不提供实时道路承诺，出发前必须复核道路、天气和车辆限制。"]
+}

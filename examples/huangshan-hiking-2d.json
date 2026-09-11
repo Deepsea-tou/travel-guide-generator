@@ -1,0 +1,22 @@
+{
+  "schema_version": "2.0",
+  "meta": {"title": "黄山两日 · 山脊决策路书", "subtitle": "把体力、日照和撤退选择放在景观之前", "destination": "黄山", "language": "zh-CN", "start_date": "2026-10-24", "days": 2, "travelers": 1, "currency": "CNY", "timezone": "Asia/Shanghai", "theme": "forest", "trip_id": "demo-huangshan-2d"},
+  "trip": {"primary_mode": "hiking", "secondary_modes": []},
+  "privacy": {"output_scope": "personal", "private_paths": [], "sensitive_fields": []},
+  "personalization": {"pace": "balanced", "signals": ["activity.hiking", "nature.ridge"], "applied_rules": []},
+  "preferences": {"pace": "balanced", "transport": ["walk"], "earliest_start": "06:00", "latest_end": "19:00"},
+  "sources": [{"id": "demo-hike", "title": "脱敏徒步演示数据，不代表实时开放状态", "type": "estimate", "checked_at": "2026-09-11", "estimated": true}],
+  "days": [
+    {"day": 1, "date": "2026-10-24", "title": "上山与主脊观察", "elevation": {"distance_km": 10.5, "ascent_m": 1250, "descent_m": 250}, "supplies": ["起点补齐午餐", "山上补给不可作为唯一保障"], "water": ["起步携带 1.5–2L，按天气调整"], "retreat_points": ["中段索道站：按官方运营状态撤退"], "latest_pass": "14:30 前通过主脊决策点", "mandatory_gear": ["防风层", "头灯", "离线地图", "急救与保温物"], "stop_conditions": [{"trigger": "雷暴、强风或步道关闭", "action": "停止推进并走官方撤退线路"}, {"trigger": "14:30 未通过决策点", "action": "放弃后续支线"}], "items": [
+      {"name": "登山口核验", "start": "06:30", "end": "07:00", "description": "确认天气、索道和步道状态；任一关闭即切换方案。", "coords": [118.17, 30.12], "source_ids": ["demo-hike"]},
+      {"name": "主脊决策点", "start": "12:00", "end": "14:00", "description": "补水进食，按体力、日照和天气决定是否继续。", "coords": [118.18, 30.14], "source_ids": ["demo-hike"]}
+    ]},
+    {"day": 2, "date": "2026-10-25", "title": "短环线与保守下撤", "elevation": {"distance_km": 8.0, "ascent_m": 350, "descent_m": 1100}, "supplies": ["住宿点早餐与打包食物"], "water": ["出发携带不少于 1.2L"], "retreat_points": ["索道站或原路返回住宿点"], "latest_pass": "13:00 开始下撤", "mandatory_gear": ["登山杖", "防滑鞋", "雨具", "头灯"], "stop_conditions": [{"trigger": "能见度持续过低或膝踝疼痛加重", "action": "取消环线并就近下撤"}], "items": [
+      {"name": "晨间短环线", "start": "07:00", "end": "10:30", "description": "不以日出为必须目标，优先路况与能见度。", "coords": [118.18, 30.14], "source_ids": ["demo-hike"]},
+      {"name": "下撤与交通缓冲", "start": "11:30", "end": "16:30", "description": "为排队、下坡速度和接驳留出机动。", "coords": [118.17, 30.12], "source_ids": ["demo-hike"]}
+    ]}
+  ],
+  "budget": {"categories": {"交通": 400, "门票与索道": 500, "住宿": 500, "餐饮补给": 260, "机动": 240}, "total": 1900},
+  "packing": ["头灯", "防风保温层", "雨具", "登山杖", "离线地图", "急救包"],
+  "tips": ["这是结构演示，不可替代临行前官方开放、天气与线路核验。"]
+}
