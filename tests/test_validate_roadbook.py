@@ -47,6 +47,19 @@ class ValidateRoadbookTest(unittest.TestCase):
         report = validate_roadbook(guide)
         self.assertIn("road_trip.driving.excessive", codes(report, "warnings"))
 
+    def test_share_scope_requires_explicit_sensitive_field_inventory(self):
+        guide = fixture()
+        guide["privacy"] = {"output_scope": "share"}
+        report = validate_roadbook(guide)
+        self.assertIn("privacy.inventory.missing", codes(report, "errors"))
+
+    def test_share_images_require_metadata_check(self):
+        guide = fixture()
+        guide["privacy"]["output_scope"] = "share"
+        guide["images"] = [{"src": "cover.jpg"}]
+        report = validate_roadbook(guide)
+        self.assertIn("privacy.image_metadata.unchecked", codes(report, "errors"))
+
 
 if __name__ == "__main__":
     unittest.main()

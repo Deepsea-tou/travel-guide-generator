@@ -20,6 +20,7 @@ class SanitizeShareVersionTest(unittest.TestCase):
             self.assertNotIn(marker, encoded)
         self.assertIn("Bring water", encoded)
         self.assertEqual("share", shared["privacy"]["output_scope"])
+        self.assertEqual([], shared["privacy"]["private_paths"])
 
     def test_rejects_unclassified_local_path_in_value(self):
         local_path = "/" + "Users/example/secret.txt"

@@ -55,6 +55,6 @@ def sanitize_for_share(source):
     sensitive_values = [source.get(field) for field in sensitive_fields]
     result = _clean(source, sensitive_fields)
     result.setdefault("privacy", {})
-    result["privacy"] = {"output_scope": "share", "sensitive_fields": []}
+    result["privacy"] = {"output_scope": "share", "private_paths": [], "sensitive_fields": []}
     _assert_publishable(result, sensitive_values)
     return result

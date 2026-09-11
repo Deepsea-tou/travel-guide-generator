@@ -1,4 +1,6 @@
+import json
 import unittest
+from pathlib import Path
 
 from scripts.migrate_guide import migrate_to_v2
 
@@ -26,6 +28,13 @@ class MigrateGuideTest(unittest.TestCase):
     def test_unknown_version_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "unsupported schema_version"):
             migrate_to_v2({"schema_version": "9.0"})
+
+    def test_schema_declares_mode_conditional_requirements(self):
+        schema = json.loads(Path("references/roadbook-schema.json").read_text(encoding="utf-8"))
+        encoded = json.dumps(schema)
+        for field in ("rest_windows", "rain_alternatives", "elevation", "supplies", "water", "retreat_points", "driving_segments"):
+            self.assertIn(field, encoded)
+        self.assertIn("allOf", schema)
 
 
 if __name__ == "__main__":

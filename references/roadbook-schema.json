@@ -35,7 +35,7 @@
     },
     "privacy": {
       "type": "object",
-      "required": ["output_scope"],
+      "required": ["output_scope", "private_paths", "sensitive_fields"],
       "properties": {
         "output_scope": {"enum": ["personal", "share"]},
         "private_paths": {"type": "array", "items": {"type": "string"}},
@@ -48,6 +48,20 @@
     "days": {"type": "array", "items": {"$ref": "#/$defs/day"}}
   },
   "additionalProperties": true,
+  "allOf": [
+    {
+      "if": {"properties": {"trip": {"properties": {"primary_mode": {"const": "city"}}}}},
+      "then": {"properties": {"days": {"items": {"required": ["rest_windows", "rain_alternatives"]}}}}
+    },
+    {
+      "if": {"properties": {"trip": {"properties": {"primary_mode": {"const": "hiking"}}}}},
+      "then": {"properties": {"days": {"items": {"required": ["elevation", "supplies", "water", "retreat_points", "latest_pass", "mandatory_gear", "stop_conditions"]}}}}
+    },
+    {
+      "if": {"properties": {"trip": {"properties": {"primary_mode": {"const": "road_trip"}}}}},
+      "then": {"properties": {"days": {"items": {"required": ["driving_segments", "fuel_or_charge", "parking", "stop_conditions"]}}}}
+    }
+  ],
   "$defs": {
     "coordinates": {
       "type": "array", "prefixItems": [{"type": "number"}, {"type": "number"}],
@@ -92,6 +106,17 @@
       "properties": {
         "day": {"type": "integer", "minimum": 1}, "date": {"type": "string", "format": "date"},
         "title": {"type": "string"}, "items": {"type": "array", "items": {"type": "object"}},
+        "rest_windows": {"type": "array", "items": {"type": "string"}},
+        "rain_alternatives": {"type": "array", "items": {"type": "string"}},
+        "elevation": {"type": "object", "additionalProperties": true},
+        "supplies": {"type": "array", "items": {"type": ["string", "object"]}},
+        "water": {"type": "array", "items": {"type": ["string", "object"]}},
+        "retreat_points": {"type": "array", "items": {"type": ["string", "object"]}},
+        "latest_pass": {"type": ["string", "object"]},
+        "mandatory_gear": {"type": "array", "items": {"type": "string"}},
+        "driving_segments": {"type": "array", "items": {"$ref": "#/$defs/route_leg"}},
+        "fuel_or_charge": {"type": "array", "items": {"type": ["string", "object"]}},
+        "parking": {"type": "array", "items": {"type": ["string", "object"]}},
         "stop_conditions": {"type": "array", "items": {"$ref": "#/$defs/stop_condition"}},
         "alternatives": {"type": "array", "items": {"$ref": "#/$defs/alternative"}}
       },

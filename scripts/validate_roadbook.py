@@ -64,7 +64,7 @@ def _validate_mode(data, errors, warnings):
                 if not day.get(field):
                     _add(warnings, "warning", f"city.{field}.missing", f"城市行程缺少 {field}", base)
         elif mode == "hiking":
-            for field in ("elevation", "supplies", "retreat_points", "stop_conditions"):
+            for field in ("elevation", "supplies", "water", "retreat_points", "latest_pass", "mandatory_gear", "stop_conditions"):
                 if not day.get(field):
                     _add(errors, "error", f"hiking.{field}.missing", f"徒步日缺少 {field}", base)
         elif mode == "road_trip":
@@ -79,6 +79,12 @@ def _validate_mode(data, errors, warnings):
 def _validate_privacy(data, errors):
     if data.get("privacy", {}).get("output_scope") != "share":
         return
+    privacy = data.get("privacy", {})
+    if "sensitive_fields" not in privacy or "private_paths" not in privacy:
+        _add(errors, "error", "privacy.inventory.missing", "分享版缺少明确的敏感字段与路径清单", "privacy")
+    images = data.get("images", [])
+    if images and any(not image.get("metadata_checked") for image in images):
+        _add(errors, "error", "privacy.image_metadata.unchecked", "分享图片尚未完成元数据检查", "images")
     encoded = json.dumps(data, ensure_ascii=False)
     markers = ("/" + "Users/", "/home/", "file:" + "//", ".chatgpt" + "-projects")
     if any(marker in encoded for marker in markers) or re.search(r'\b[A-Za-z]:\\\\', encoded):
