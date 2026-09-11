@@ -33,6 +33,7 @@
     font-size: 16px; line-height: 1.65;
   }
   a { color: var(--accent-dark); text-underline-offset: .2em; }
+  a:visited { color: color-mix(in srgb, var(--accent-dark) 72%, var(--muted)); }
   .skip-link { position: fixed; left: 1rem; top: -4rem; z-index: 20; padding: .7rem 1rem; background: var(--ink); color: var(--paper); }
   .skip-link:focus { top: 1rem; }
 }
@@ -65,7 +66,7 @@
   .route-ribbon span { color: var(--muted); font-size: .86rem; }
   .day { display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding: 34px 0; border-top: 1px solid var(--line); }
   .day-nav { position: sticky; top: 10px; z-index: 5; display: flex; gap: 6px; width: max-content; max-width: 100%; padding: 6px; margin: 0 0 24px auto; overflow-x: auto; border: 1px solid var(--line); background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(10px); }
-  .day-nav a { min-width: 44px; min-height: 44px; display: grid; place-items: center; text-decoration: none; font: 700 .75rem/1 ui-monospace, monospace; }
+  .day-nav a { min-width: 44px; min-height: 44px; display: grid; place-items: center; text-decoration: none; font: 700 .75rem/1 ui-monospace, monospace; transition: background-color 140ms ease, color 140ms ease, transform 140ms ease; }
   .day-heading, .item-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .item-heading { justify-content: flex-start; }
   .item-check, .packing-check { width: 20px; height: 20px; accent-color: var(--accent); }
@@ -93,12 +94,14 @@
   .budget-table th, .budget-table td { padding: 12px 0; border-bottom: 1px solid var(--line); text-align: left; }
   .budget-table td:last-child { text-align: right; font: 700 .9rem/1 ui-monospace, monospace; }
   .budget-input { width: 7rem; min-height: 44px; padding: 6px 10px; border: 1px solid var(--line); background: transparent; color: inherit; text-align: right; }
-  .utility-button, .text-button, .shift-control button { min-height: 44px; border: 1px solid currentColor; background: transparent; color: inherit; padding: 8px 13px; cursor: pointer; }
+  .utility-button, .text-button, .shift-control button { min-height: 44px; border: 1px solid currentColor; background: transparent; color: inherit; padding: 8px 13px; cursor: pointer; transition: background-color 140ms ease, color 140ms ease, transform 140ms ease; }
+  .utility-button:hover, .text-button:hover, .shift-control button:hover, .day-nav a:hover { background: var(--ink); color: var(--paper); }
+  .utility-button:active, .text-button:active, .shift-control button:active, .day-nav a:active { transform: translateY(1px); }
   .text-button { margin-top: 12px; border-color: var(--line); color: var(--muted); font-size: .78rem; }
   .shift-control { display: flex; align-items: center; gap: 6px; font: .74rem/1 ui-monospace, monospace; }
   .shift-control input { width: 4rem; min-height: 44px; border: 1px solid var(--line); background: transparent; color: inherit; padding: 6px; }
   .packing { display: grid; gap: 10px; margin: 30px 0 0; padding: 18px; border: 1px solid var(--line); }
-  .packing label { display: flex; align-items: center; gap: 10px; min-height: 34px; }
+  .packing label { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; }
   .mode-panel { padding: 26px; background: var(--ink); color: var(--paper); }
   .mode-panel h3 { font-weight: 500; font-size: 1.4rem; }
   .mode-panel ul { padding-left: 1.2rem; margin-top: 12px; }
@@ -115,6 +118,7 @@
     .hero { min-height: 82vh; padding: 20px 18px 28px; }
     h1 { font-size: clamp(3.2rem, 18vw, 5.2rem); }
     .hero-top { flex-direction: column; gap: 5px; }
+    .hero-top .utility-button { align-self: flex-start; }
     .fact-strip { grid-template-columns: 1fr 1fr; }
     .section-heading, .day { grid-template-columns: 1fr; gap: 10px; }
     .day-index { position: static; }
