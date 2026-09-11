@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/travel-roadbook/v2/schema.json",
+  "title": "Travel Roadbook v2",
+  "type": "object",
+  "required": ["schema_version", "meta", "trip", "privacy", "days"],
+  "properties": {
+    "schema_version": {"const": "2.0"},
+    "meta": {
+      "type": "object",
+      "required": ["title", "destination", "language", "start_date", "days"],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "destination": {"type": "string", "minLength": 1},
+        "language": {"type": "string"},
+        "start_date": {"type": "string", "format": "date"},
+        "days": {"type": "integer", "minimum": 1, "maximum": 14},
+        "trip_id": {"type": "string"},
+        "theme": {"enum": ["forest", "lake-city", "plateau"]}
+      },
+      "additionalProperties": true
+    },
+    "trip": {
+      "type": "object",
+      "required": ["primary_mode"],
+      "properties": {
+        "primary_mode": {"enum": ["city", "hiking", "road_trip"]},
+        "secondary_modes": {
+          "type": "array",
+          "items": {"enum": ["city", "hiking", "road_trip"]},
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "privacy": {
+      "type": "object",
+      "required": ["output_scope"],
+      "properties": {
+        "output_scope": {"enum": ["personal", "share"]},
+        "private_paths": {"type": "array", "items": {"type": "string"}},
+        "sensitive_fields": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "personalization": {"type": "object", "additionalProperties": true},
+    "sources": {"type": "array", "items": {"$ref": "#/$defs/source"}},
+    "days": {"type": "array", "items": {"$ref": "#/$defs/day"}}
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "coordinates": {
+      "type": "array", "prefixItems": [{"type": "number"}, {"type": "number"}],
+      "minItems": 2, "maxItems": 2
+    },
+    "source": {
+      "type": "object", "required": ["id", "title"],
+      "properties": {
+        "id": {"type": "string"}, "title": {"type": "string"},
+        "url": {"type": "string"}, "type": {"type": "string"},
+        "verified_at": {"type": "string", "format": "date"},
+        "checked_at": {"type": "string", "format": "date"},
+        "dynamic": {"type": "boolean"}, "estimated": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "route_leg": {
+      "type": "object",
+      "properties": {
+        "mode": {"type": "string"}, "distance_km": {"type": "number", "minimum": 0},
+        "duration_min": {"type": "integer", "minimum": 0}, "estimated": {"type": "boolean"}
+      },
+      "additionalProperties": true
+    },
+    "stop_condition": {
+      "type": "object", "required": ["trigger", "action"],
+      "properties": {"trigger": {"type": "string"}, "action": {"type": "string"}},
+      "additionalProperties": false
+    },
+    "alternative": {
+      "type": "object", "required": ["trigger", "plan"],
+      "properties": {"trigger": {"type": "string"}, "plan": {"type": "string"}},
+      "additionalProperties": false
+    },
+    "private_note": {
+      "type": "object", "required": ["privacy", "text"],
+      "properties": {"privacy": {"enum": ["private", "share"]}, "text": {"type": "string"}},
+      "additionalProperties": false
+    },
+    "day": {
+      "type": "object", "required": ["day", "date", "title", "items"],
+      "properties": {
+        "day": {"type": "integer", "minimum": 1}, "date": {"type": "string", "format": "date"},
+        "title": {"type": "string"}, "items": {"type": "array", "items": {"type": "object"}},
+        "stop_conditions": {"type": "array", "items": {"$ref": "#/$defs/stop_condition"}},
+        "alternatives": {"type": "array", "items": {"$ref": "#/$defs/alternative"}}
+      },
+      "additionalProperties": true
+    }
+  }
+}
