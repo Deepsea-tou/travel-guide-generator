@@ -1,0 +1,8 @@
+interface:
+  display_name: "Travel Roadbook"
+  short_description: "生成可信、可执行、可分享的现代旅行攻略路书"
+  brand_color: "#2E777C"
+  default_prompt: "Use $travel-roadbook to create a relaxed three-day city and food roadbook with verified sources."
+
+policy:
+  allow_implicit_invocation: true
