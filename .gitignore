@@ -3,3 +3,12 @@ __pycache__/
 .venv/
 .idea/
 generated/
+
+# Isolated feature worktrees
+.worktrees/
+
+# Local Travel Roadbook runtime inputs and personal outputs
+.travel-roadbook/
+*.personal.html
+*.personal.json
+*.profile.json
