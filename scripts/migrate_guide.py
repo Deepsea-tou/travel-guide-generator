@@ -16,6 +16,8 @@ def migrate_to_v2(source):
         raise ValueError(f"unsupported schema_version: {version}")
 
     preferences = data.setdefault("preferences", {})
+    if not isinstance(preferences, dict):
+        raise ValueError("preferences must be an object")
     primary_mode = preferences.pop("primary_mode", "city")
     data["schema_version"] = "2.0"
     data.setdefault("trip", {"primary_mode": primary_mode, "secondary_modes": []})

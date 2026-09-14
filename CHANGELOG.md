@@ -22,4 +22,6 @@ All notable changes to this project are documented in this file.
 - Block invalid mode data and unchecked share artifacts before any files are exported.
 - Prevent direct export callers from bypassing validation or publishing unsanitized data.
 - Detect local paths, nested private fields, image metadata gaps, and sensitive values copied into unrelated fields.
+- Reject calendar timezone line injection, schedule conflicts, malformed legacy preferences, and invalid budget shapes before export.
+- Write complete roadbook bundles through temporary files and let browser tests fall back to Playwright Chromium outside macOS.
 - Improved mobile touch targets and interaction states without changing the editorial visual direction.

@@ -29,6 +29,10 @@ class MigrateGuideTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unsupported schema_version"):
             migrate_to_v2({"schema_version": "9.0"})
 
+    def test_invalid_legacy_preferences_are_rejected_cleanly(self):
+        with self.assertRaisesRegex(ValueError, "preferences"):
+            migrate_to_v2({"schema_version": "1.0", "preferences": []})
+
     def test_schema_declares_mode_conditional_requirements(self):
         schema = json.loads(Path("references/roadbook-schema.json").read_text(encoding="utf-8"))
         encoded = json.dumps(schema)

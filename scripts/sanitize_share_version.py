@@ -15,6 +15,21 @@ LOCAL_KEYS = {
     "raw_content", "conversation_text", "cookie", "api_key",
 }
 _DROP = object()
+_URL_PATTERN = re.compile(r"https?://[^\s]+", re.IGNORECASE)
+_POSIX_PATH_PATTERN = re.compile(r'''(?:^|[\s"'(=])/(?!/)(?:[^/\s"'<>]+/)+[^/\s"'<>]+''')
+_WINDOWS_PATH_PATTERN = re.compile(r"\b[A-Za-z]:\\\\")
+
+
+def contains_local_path(value):
+    """Return True when nested data contains a local absolute filesystem path."""
+    if isinstance(value, dict):
+        return any(contains_local_path(child) for child in value.values())
+    if isinstance(value, list):
+        return any(contains_local_path(child) for child in value)
+    if not isinstance(value, str):
+        return False
+    without_urls = _URL_PATTERN.sub("", value)
+    return bool(_POSIX_PATH_PATTERN.search(without_urls) or _WINDOWS_PATH_PATTERN.search(without_urls))
 
 
 def _clean(value, sensitive_fields):
@@ -39,8 +54,8 @@ def _clean(value, sensitive_fields):
 
 def _assert_publishable(data, sensitive_values):
     encoded = json.dumps(data, ensure_ascii=False)
-    markers = ("/" + "Users/", "/home/", "file:" + "//", ".chatgpt" + "-projects")
-    if any(marker in encoded for marker in markers) or re.search(r'\b[A-Za-z]:\\\\', encoded):
+    markers = ("file:" + "//", ".chatgpt" + "-projects")
+    if any(marker in encoded for marker in markers) or contains_local_path(data):
         raise PrivacyError("share output contains a local path")
     if any(value and str(value) in encoded for value in sensitive_values):
         raise PrivacyError("share output contains a configured sensitive value")

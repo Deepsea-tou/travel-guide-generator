@@ -12,8 +12,11 @@ const { chromium } = require("playwright");
   const python = fs.existsSync(".venv/bin/python") ? ".venv/bin/python" : "python3";
   execFileSync(python, ["scripts/build_roadbook.py", "tests/fixtures/v2-city-minimal.json", "--output", outputBase]);
 
-  const executablePath = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-  const browser = await chromium.launch({ headless: true, executablePath });
+  const defaultChrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  const executablePath = process.env.CHROME_PATH || (fs.existsSync(defaultChrome) ? defaultChrome : undefined);
+  const launchOptions = { headless: true };
+  if (executablePath) launchOptions.executablePath = executablePath;
+  const browser = await chromium.launch(launchOptions);
   const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
   const page = await context.newPage();
   const pageErrors = [];

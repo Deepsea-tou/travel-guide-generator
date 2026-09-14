@@ -27,6 +27,11 @@ class SanitizeShareVersionTest(unittest.TestCase):
         with self.assertRaises(PrivacyError):
             sanitize_for_share({"privacy": {"sensitive_fields": []}, "description": local_path})
 
+    def test_rejects_other_unix_absolute_paths(self):
+        local_path = "/private/tmp/secret.txt"
+        with self.assertRaisesRegex(PrivacyError, "local path"):
+            sanitize_for_share({"privacy": {"sensitive_fields": []}, "description": local_path})
+
     def test_rejects_sensitive_value_copied_under_another_key(self):
         source = {
             "privacy": {"sensitive_fields": ["companion_name"]},

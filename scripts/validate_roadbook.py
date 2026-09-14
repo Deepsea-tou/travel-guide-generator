@@ -4,13 +4,14 @@
 from copy import deepcopy
 from datetime import date, datetime
 import json
-import re
 
 try:
     from .roadbook_modes import policy_for
+    from .sanitize_share_version import contains_local_path
     from .validate_guide import issue, validate_guide
 except ImportError:
     from roadbook_modes import policy_for
+    from sanitize_share_version import contains_local_path
     from validate_guide import issue, validate_guide
 
 
@@ -86,9 +87,29 @@ def _validate_privacy(data, errors):
     if images and any(not image.get("metadata_checked") for image in images):
         _add(errors, "error", "privacy.image_metadata.unchecked", "分享图片尚未完成元数据检查", "images")
     encoded = json.dumps(data, ensure_ascii=False)
-    markers = ("/" + "Users/", "/home/", "file:" + "//", ".chatgpt" + "-projects")
-    if any(marker in encoded for marker in markers) or re.search(r'\b[A-Za-z]:\\\\', encoded):
+    markers = ("file:" + "//", ".chatgpt" + "-projects")
+    if any(marker in encoded for marker in markers) or contains_local_path(data):
         _add(errors, "error", "privacy.local_path", "分享版包含本地路径", "$")
+
+
+def _validate_shapes(data, errors):
+    budget = data.get("budget")
+    if budget is None:
+        return
+    if not isinstance(budget, dict):
+        _add(errors, "error", "budget.invalid", "budget 必须是对象", "budget")
+        return
+    selected = budget.get("selected")
+    profiles = budget.get("profiles", {})
+    if selected:
+        if not isinstance(profiles, dict) or not isinstance(profiles.get(selected, {}), dict):
+            _add(errors, "error", "budget.profile.invalid", "所选预算档必须是对象", "budget.profiles")
+            return
+        profile = profiles.get(selected, {})
+    else:
+        profile = budget
+    if "categories" in profile and not isinstance(profile["categories"], dict):
+        _add(errors, "error", "budget.categories.invalid", "预算分类必须是对象", "budget.categories")
 
 
 def validate_roadbook(data, today=None):
@@ -105,7 +126,8 @@ def validate_roadbook(data, today=None):
     _validate_sources(data, errors, warnings, today)
     _validate_mode(data, errors, warnings)
     _validate_privacy(data, errors)
-    valid = not errors
+    _validate_shapes(data, errors)
+    valid = not errors and not conflicts
     return {
         "valid": valid,
         "status": "pass" if valid else "fail",

@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+from copy import deepcopy
 from pathlib import Path
 
 from scripts.build_roadbook import build_roadbook
@@ -56,6 +57,15 @@ class BuildRoadbookTest(unittest.TestCase):
             result = build_roadbook(guide, Path(directory) / "guide")
             self.assertEqual("fail", result["status"])
             self.assertEqual({}, result["files"])
+
+    def test_schedule_conflict_stops_export(self):
+        guide = deepcopy(self.fixture)
+        guide["days"][0]["items"].append({"name": "重叠行程", "start": "10:00", "end": "12:00"})
+        with tempfile.TemporaryDirectory() as directory:
+            result = build_roadbook(guide, Path(directory) / "guide")
+            self.assertEqual("fail", result["status"])
+            self.assertEqual({}, result["files"])
+            self.assertTrue(any(item["code"] == "TIME_OVERLAP" for item in result["report"]["conflicts"]))
 
 
 if __name__ == "__main__":

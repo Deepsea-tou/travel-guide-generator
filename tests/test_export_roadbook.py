@@ -31,6 +31,16 @@ class ExportRoadbookTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "sanitized"):
                 export_roadbook_bundle(guide, Path(directory) / "guide")
 
+    def test_invalid_budget_leaves_no_partial_bundle(self):
+        guide = dict(self.fixture)
+        guide["budget"] = {"categories": [1]}
+        guide["quality"] = {"valid": True, "status": "pass"}
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "guide"
+            with self.assertRaisesRegex(ValueError, "validation"):
+                export_roadbook_bundle(guide, output)
+            self.assertEqual([], list(Path(directory).glob("guide.*")))
+
 
 if __name__ == "__main__":
     unittest.main()
