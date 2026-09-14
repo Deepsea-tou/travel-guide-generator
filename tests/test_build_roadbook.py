@@ -23,12 +23,39 @@ class BuildRoadbookTest(unittest.TestCase):
 
     def test_share_build_removes_sensitive_field(self):
         guide = dict(self.fixture)
-        guide["privacy"] = {"output_scope": "personal", "sensitive_fields": ["private_note"]}
+        guide["privacy"] = {
+            "output_scope": "personal",
+            "private_paths": [],
+            "sensitive_fields": ["private_note"],
+        }
         guide["private_note"] = "do not publish"
         with tempfile.TemporaryDirectory() as directory:
             result = build_roadbook(guide, Path(directory) / "guide", output_scope="share")
+            self.assertEqual("pass", result["status"])
             content = Path(result["files"]["normalized_json"]).read_text(encoding="utf-8")
             self.assertNotIn("do not publish", content)
+
+    def test_share_checks_run_before_export(self):
+        guide = dict(self.fixture)
+        guide["privacy"] = {
+            "output_scope": "personal",
+            "private_paths": [],
+            "sensitive_fields": [],
+        }
+        guide["images"] = [{"src": "cover.jpg", "metadata_checked": False}]
+        with tempfile.TemporaryDirectory() as directory:
+            result = build_roadbook(guide, Path(directory) / "guide", output_scope="share")
+            self.assertEqual("fail", result["status"])
+            self.assertEqual({}, result["files"])
+            self.assertTrue(any(error["code"] == "privacy.image_metadata.unchecked" for error in result["report"]["errors"]))
+
+    def test_invalid_roadbook_stops_export(self):
+        guide = dict(self.fixture)
+        guide["trip"] = {**guide["trip"], "primary_mode": "hiking"}
+        with tempfile.TemporaryDirectory() as directory:
+            result = build_roadbook(guide, Path(directory) / "guide")
+            self.assertEqual("fail", result["status"])
+            self.assertEqual({}, result["files"])
 
 
 if __name__ == "__main__":

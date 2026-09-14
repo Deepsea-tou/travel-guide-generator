@@ -37,12 +37,13 @@ def build_roadbook(source, output_base, knowledge_root=None, output_scope="perso
     data = apply_personalization(data, profile, data.get("request", {}))
     enrich_routes(data)
     data["season_tips"] = build_season_tips(data)
+    data.setdefault("privacy", {})["output_scope"] = output_scope
     report = validate_roadbook(data)
     data["quality"] = report
+    if report["status"] != "pass":
+        return {"status": report["status"], "report": report, "files": {}}
     if output_scope == "share":
         data = sanitize_for_share(data)
-    else:
-        data.setdefault("privacy", {})["output_scope"] = "personal"
     files = export_roadbook_bundle(data, output_base)
     return {"status": report["status"], "report": report, "files": files}
 
