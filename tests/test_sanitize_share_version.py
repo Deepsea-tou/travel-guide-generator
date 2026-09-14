@@ -32,6 +32,17 @@ class SanitizeShareVersionTest(unittest.TestCase):
         with self.assertRaisesRegex(PrivacyError, "local path"):
             sanitize_for_share({"privacy": {"sensitive_fields": []}, "description": local_path})
 
+    def test_rejects_windows_file_urls_and_path_keys(self):
+        cases = (
+            {"description": r"C:\Users\alice\secret.txt"},
+            {"description": "C:/Users/alice/secret.txt"},
+            {"description": "FILE:///private/tmp/secret.txt"},
+            {"metadata": {"/private/tmp/secret.txt": "private"}},
+        )
+        for payload in cases:
+            with self.subTest(payload=payload), self.assertRaisesRegex(PrivacyError, "local path"):
+                sanitize_for_share({"privacy": {"sensitive_fields": []}, **payload})
+
     def test_rejects_sensitive_value_copied_under_another_key(self):
         source = {
             "privacy": {"sensitive_fields": ["companion_name"]},

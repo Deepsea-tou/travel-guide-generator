@@ -16,18 +16,21 @@ LOCAL_KEYS = {
 }
 _DROP = object()
 _URL_PATTERN = re.compile(r"https?://[^\s]+", re.IGNORECASE)
+_FILE_URL_PATTERN = re.compile(r"\bfile://", re.IGNORECASE)
 _POSIX_PATH_PATTERN = re.compile(r'''(?:^|[\s"'(=])/(?!/)(?:[^/\s"'<>]+/)+[^/\s"'<>]+''')
-_WINDOWS_PATH_PATTERN = re.compile(r"\b[A-Za-z]:\\\\")
+_WINDOWS_PATH_PATTERN = re.compile(r'''(?:^|[\s"'(=])[A-Za-z]:[\\/](?:[^\\/\s"'<>]+[\\/])*[^\\/\s"'<>]+''')
 
 
 def contains_local_path(value):
     """Return True when nested data contains a local absolute filesystem path."""
     if isinstance(value, dict):
-        return any(contains_local_path(child) for child in value.values())
+        return any(contains_local_path(key) or contains_local_path(child) for key, child in value.items())
     if isinstance(value, list):
         return any(contains_local_path(child) for child in value)
     if not isinstance(value, str):
         return False
+    if _FILE_URL_PATTERN.search(value):
+        return True
     without_urls = _URL_PATTERN.sub("", value)
     return bool(_POSIX_PATH_PATTERN.search(without_urls) or _WINDOWS_PATH_PATTERN.search(without_urls))
 
