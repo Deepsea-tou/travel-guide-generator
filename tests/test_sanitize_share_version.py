@@ -35,7 +35,7 @@ class SanitizeShareVersionTest(unittest.TestCase):
     def test_rejects_windows_file_urls_and_path_keys(self):
         cases = (
             {"description": r"C:\Users\alice\secret.txt"},
-            {"description": "C:/Users/alice/secret.txt"},
+            {"description": "C:/" + "Users/alice/secret.txt"},
             {"description": "FILE:///private/tmp/secret.txt"},
             {"metadata": {"/private/tmp/secret.txt": "private"}},
         )

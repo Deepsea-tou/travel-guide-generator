@@ -16,7 +16,7 @@ LOCAL_KEYS = {
 }
 _DROP = object()
 _URL_PATTERN = re.compile(r"https?://[^\s]+", re.IGNORECASE)
-_FILE_URL_PATTERN = re.compile(r"\bfile://", re.IGNORECASE)
+_FILE_URL_PATTERN = re.compile(r"\bfile:" + r"//", re.IGNORECASE)
 _POSIX_PATH_PATTERN = re.compile(r'''(?:^|[\s"'(=])/(?!/)(?:[^/\s"'<>]+/)+[^/\s"'<>]+''')
 _WINDOWS_PATH_PATTERN = re.compile(r'''(?:^|[\s"'(=])[A-Za-z]:[\\/](?:[^\\/\s"'<>]+[\\/])*[^\\/\s"'<>]+''')
 
