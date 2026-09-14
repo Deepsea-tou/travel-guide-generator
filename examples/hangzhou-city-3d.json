@@ -1,0 +1,32 @@
+{
+  "schema_version": "2.0",
+  "meta": {"title": "杭州三日 · 湖山慢食路书", "subtitle": "湖岸、园林与巷子里的三顿好饭", "destination": "杭州", "origin": "合肥", "language": "zh-CN", "start_date": "2026-10-16", "days": 3, "travelers": 2, "currency": "CNY", "timezone": "Asia/Shanghai", "theme": "lake-city", "trip_id": "demo-hangzhou-3d"},
+  "trip": {"primary_mode": "city", "secondary_modes": []},
+  "privacy": {"output_scope": "personal", "private_paths": [], "sensitive_fields": []},
+  "personalization": {"pace": "relaxed", "signals": ["interest.food", "nature.lake", "pace.slow"], "applied_rules": ["avoid_peak_queues", "prefer_single_hotel"]},
+  "preferences": {"pace": "relaxed", "transport": ["transit"], "earliest_start": "08:00", "latest_end": "21:30"},
+  "sources": [{"id": "demo-estimate", "title": "脱敏演示数据，出发前复核", "type": "estimate", "checked_at": "2026-09-11", "estimated": true}],
+  "transport": [{"mode": "train", "title": "合肥南至杭州东", "detail": "车次与票价须在出发前复核", "price": "以购票平台为准", "recommended": true, "source_ids": ["demo-estimate"]}],
+  "hotels": [{"area": "湖滨—龙翔桥一带", "price": "演示区间", "reason": "三晚固定同一基地，步行与地铁衔接均衡", "source_ids": ["demo-estimate"]}],
+  "foods": [
+    {"name": "杭帮菜正餐", "shop": "选择可预约门店", "price": "演示区间", "reason": "避开核心饭点并准备同片区候补", "source_ids": ["demo-estimate"]},
+    {"name": "片儿川与小笼", "shop": "社区面馆", "price": "演示区间", "reason": "适合轻量早餐或午餐", "source_ids": ["demo-estimate"]}
+  ],
+  "days": [
+    {"day": 1, "date": "2026-10-16", "title": "抵达后只走湖滨", "rest_windows": ["14:00–15:30 酒店休息"], "rain_alternatives": ["改为室内展馆与茶馆"], "items": [
+      {"name": "杭州东站抵达与寄存", "start": "10:00", "end": "11:00", "description": "先处理行李，不把抵达日排满。", "coords": [120.212, 30.291], "source_ids": ["demo-estimate"]},
+      {"name": "西湖东岸慢行", "start": "16:00", "end": "18:30", "description": "从湖滨向安静水岸移动，热门节点只短停。", "coords": [120.159, 30.252], "source_ids": ["demo-estimate"]}
+    ]},
+    {"day": 2, "date": "2026-10-17", "title": "园林与山脚茶意", "rest_windows": ["13:30–15:00 午休"], "rain_alternatives": ["博物馆与室内茶空间"], "items": [
+      {"name": "园林晨间窗口", "start": "08:30", "end": "11:00", "description": "用早时段换取更低客流。", "coords": [120.13, 30.24], "source_ids": ["demo-estimate"]},
+      {"name": "茶园边缘散步", "start": "15:30", "end": "18:00", "description": "不追打卡点，保留坐下喝茶的时间。", "coords": [120.105, 30.23], "source_ids": ["demo-estimate"]}
+    ]},
+    {"day": 3, "date": "2026-10-18", "title": "运河街巷与从容返程", "rest_windows": ["13:00–14:00 咖啡休息"], "rain_alternatives": ["手工艺博物馆群"], "items": [
+      {"name": "运河沿线慢行", "start": "09:00", "end": "11:30", "description": "在游客高峰前完成主要步行。", "coords": [120.149, 30.32], "source_ids": ["demo-estimate"]},
+      {"name": "返回杭州东站", "start": "15:00", "end": "16:00", "description": "为进站与临时交通波动留缓冲。", "coords": [120.212, 30.291], "source_ids": ["demo-estimate"]}
+    ]}
+  ],
+  "budget": {"selected": "comfortable", "profiles": {"comfortable": {"categories": {"往返交通": 600, "住宿": 1200, "餐饮": 800, "市内交通": 160, "机动": 240}, "total": 3000}}},
+  "packing": ["身份证件", "舒适步行鞋", "雨具", "充电设备"],
+  "tips": ["本文件为结构与视觉演示，车次、营业、价格和天气需临行前复核。"]
+}

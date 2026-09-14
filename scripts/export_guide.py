@@ -4,6 +4,7 @@
 import argparse
 import json
 from pathlib import Path
+import re
 
 try:
     from .guide_utils import load_json, write_json
@@ -61,7 +62,9 @@ def ics_escape(value):
 
 def ics_text(guide):
     meta = guide.get("meta", {})
-    timezone = meta.get("timezone", "Asia/Shanghai")
+    timezone = str(meta.get("timezone", "Asia/Shanghai"))
+    if not re.fullmatch(r"[A-Za-z0-9_+.-]+(?:/[A-Za-z0-9_+.-]+)*", timezone):
+        raise ValueError("timezone must be a valid IANA-style identifier")
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",

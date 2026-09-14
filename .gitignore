@@ -1,5 +1,15 @@
 __pycache__/
 *.py[cod]
 .venv/
+node_modules/
 .idea/
 generated/
+
+# Isolated feature worktrees
+.worktrees/
+
+# Local Travel Roadbook runtime inputs and personal outputs
+.travel-roadbook/
+*.personal.html
+*.personal.json
+*.profile.json
