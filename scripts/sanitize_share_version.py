@@ -46,13 +46,35 @@ def _assert_publishable(data, sensitive_values):
         raise PrivacyError("share output contains a configured sensitive value")
 
 
+def _scalar_values(value):
+    if isinstance(value, dict):
+        return [item for child in value.values() for item in _scalar_values(child)]
+    if isinstance(value, list):
+        return [item for child in value for item in _scalar_values(child)]
+    return [value]
+
+
+def _collect_sensitive_values(value, sensitive_fields):
+    if isinstance(value, dict):
+        collected = []
+        for key, child in value.items():
+            if key in sensitive_fields:
+                collected.extend(_scalar_values(child))
+            else:
+                collected.extend(_collect_sensitive_values(child, sensitive_fields))
+        return collected
+    if isinstance(value, list):
+        return [item for child in value for item in _collect_sensitive_values(child, sensitive_fields)]
+    return []
+
+
 def sanitize_for_share(source):
     """Return a recursively sanitized copy and reject residual local paths."""
     if not isinstance(source, dict):
         raise PrivacyError("roadbook root must be an object")
     privacy = source.get("privacy", {})
     sensitive_fields = set(privacy.get("sensitive_fields", []))
-    sensitive_values = [source.get(field) for field in sensitive_fields]
+    sensitive_values = _collect_sensitive_values(source, sensitive_fields)
     result = _clean(source, sensitive_fields)
     result.setdefault("privacy", {})
     result["privacy"] = {"output_scope": "share", "private_paths": [], "sensitive_fields": []}

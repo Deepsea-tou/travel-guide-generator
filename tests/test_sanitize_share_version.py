@@ -27,6 +27,15 @@ class SanitizeShareVersionTest(unittest.TestCase):
         with self.assertRaises(PrivacyError):
             sanitize_for_share({"privacy": {"sensitive_fields": []}, "description": local_path})
 
+    def test_rejects_sensitive_value_copied_under_another_key(self):
+        source = {
+            "privacy": {"sensitive_fields": ["companion_name"]},
+            "profile": {"companion_name": "Private Person"},
+            "description": "Private Person prefers a quiet room",
+        }
+        with self.assertRaisesRegex(PrivacyError, "sensitive value"):
+            sanitize_for_share(source)
+
 
 if __name__ == "__main__":
     unittest.main()
